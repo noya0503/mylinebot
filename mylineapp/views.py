@@ -27,12 +27,19 @@ def callback(request):
             return HttpResponseBadRequest()
 
         for event in events:
+
             # 若有訊息事件
             if isinstance(event, MessageEvent):
+
+                txtmsg = "您所傳的訊是:\n"
+                txtmsg += event.message.text
+
                 # 回傳收到的文字訊息
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text=event.message.text))
+                    TextSendMessage( text = txtmsg ))
+
+
 
         return HttpResponse()
     else:
