@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage
+from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage, ImageSendMessage, LocationSendMessage
 
 from datetime import datetime
 
@@ -43,7 +43,11 @@ def callback(request):
                 # 回傳收到的文字訊息
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage( text = txtmsg ))
+                    [TextSendMessage( text = txtmsg ),
+                    StickerSendMessage(package_id=11537, sticker_id=52002735),
+                    ImageSendMessage(original_content_url='https://c.files.bbci.co.uk/9922/live/9164f0d0-7bea-11ef-990e-5fdb59c2c48e.jpg',preview_image_url='https://c.files.bbci.co.uk/9922/live/9164f0d0-7bea-11ef-990e-5fdb59c2c48e.jpg'),
+                    LocationSendMessage(title='Wenzao',address='Kaohsiung',latitude=22.994821,longitude=120.196452)
+                    ])
 
 
 
