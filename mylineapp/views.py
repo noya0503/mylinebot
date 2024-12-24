@@ -18,36 +18,25 @@ def index(request):
 @csrf_exempt
 def callback(request):
     if request.method == 'POST':
-        signature = request.META['HTTP_X_LINE_SIGNATURE']
-        body = request.body.decode('utf-8')
-
-        try:
-            events = parser.parse(body, signature)
-        except InvalidSignatureError:
-            return HttpResponseForbidden()
-        except LineBotApiError:
-            return HttpResponseBadRequest()
-
         for event in events:
-
-            # 若有訊息事件
             if isinstance(event, MessageEvent):
+                if txtmsg in ["你好"，"Hello"，"早安"，"Hi"]:
 
-                currentDateAndTime = datetime.now()
-                currentTime = currentDateAndTime.strftime("%H:%M:%S")
+                   stkptg, stkid = 1070, 17840
+                   reply_message = "您好，請問需要為你做什麼?"
 
-                txtmsg = "您所傳的訊是:\n"
-                txtmsg += currentTime + "\n"
-                txtmsg += event.message.text
+                   line_bot_api.reply_message(
+                   event.reply_token,
+                   [TextSendMessage( text = replymsg ),
+                   StickerSendMessage(package_id=stkpkg, sticker_id=stkid)])
+
+                else:
+                    replymsg = "你所傳的訊息是:\n" + txtmsg
 
                 # 回傳收到的文字訊息
                 line_bot_api.reply_message(
                     event.reply_token,
-                    [TextSendMessage( text = txtmsg ),
-                    StickerSendMessage(package_id=11537, sticker_id=52002735),
-                    ImageSendMessage(original_content_url='https://c.files.bbci.co.uk/9922/live/9164f0d0-7bea-11ef-990e-5fdb59c2c48e.jpg',preview_image_url='https://c.files.bbci.co.uk/9922/live/9164f0d0-7bea-11ef-990e-5fdb59c2c48e.jpg'),
-                    LocationSendMessage(title='Wenzao',address='Kaohsiung',latitude=22.994821,longitude=120.196452)
-                    ])
+                    TextSendMessage( text = replymsg ))
 
 
 
